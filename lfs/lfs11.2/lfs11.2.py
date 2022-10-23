@@ -46,6 +46,10 @@ gzip --version | head -n1
 cat /proc/version
 m4 --version | head -n1
 make --version | head -n1
+make_version=$(make -v 2>&1| grep -v 'command not found' |grep Make |awk '{print $3}'| cut -d'.' -f1)
+if [ "$make_version" != 4 ];then
+ echo "ERROR: make version $make_version, need version at least 4"
+fi
 patch --version | head -n1
 echo Perl `perl -V:version`
 python3 --version
