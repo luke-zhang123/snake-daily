@@ -1,9 +1,11 @@
 
 # [Linux From Scratch](https://www.linuxfromscratch.org)
 
+完全从源码，一步步编译生成一个linux系统，可以更深入了解linux系统内部依赖和系统构建过程
+
 ## LFS 11.2 安装指导
 
- - 需要下载pdf知道书，和软件包 package
+ - 需要下载 pdf 指导书，和软件包 package
 
 [LFS-BOOK-11.2.pdf](https://www.linuxfromscratch.org/lfs/downloads/11.2/LFS-BOOK-11.2.pdf)
 
