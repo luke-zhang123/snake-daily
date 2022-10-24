@@ -121,14 +121,38 @@ make
 make DESTDIR=$LFS install
 sed '/RTLDLIST=/s@/usr@@g' -i $LFS/usr/bin/ldd
 
-echo 'gcc test'
+pwd
 cat <<"EOF"
+gcc test:
 echo 'int main(){}' | gcc -xc -
 readelf -l a.out | grep ld-linux
+  output:
+[Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]
 
-check output "[Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]"
 rm -v a.out
-
-if OK, run below to finalize the installation
-$LFS/tools/libexec/gcc/$LFS_TGT/12.2.0/install-tools/mkheaders
 EOF
+read -p "Press enter to continue"
+
+$LFS/tools/libexec/gcc/$LFS_TGT/12.2.0/install-tools/mkheaders
+
+cd $LFS/sources/
+rm -rf gcc-12.2.0
+tar xf gcc-12.2.0.tar.xz
+cd gcc-12.2.0
+
+mkdir -v build
+cd build
+
+../libstdc++-v3/configure \
+ --host=$LFS_TGT \
+ --build=$(../config.guess) \
+ --prefix=/usr \
+ --disable-multilib \
+ --disable-nls \
+ --disable-libstdcxx-pch \
+ --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/12.2.0
+
+make
+make DESTDIR=$LFS install
+
+rm -v $LFS/usr/lib/lib{stdc++,stdc++fs,supc++}.la

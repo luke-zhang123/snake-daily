@@ -1,5 +1,5 @@
 #!/bin/bash
-# chapter 7 before chroot
+# chapter 7.2-7.4 before chroot
 
 run_user=$(id -u -n)
 if [ "$run_user" != "root" ];then
@@ -30,6 +30,7 @@ if [ -h $LFS/dev/shm ]; then
  mkdir -pv $LFS/$(readlink $LFS/dev/shm)
 fi
 
+pwd
 cat <<"EOF"
 run below enter chroot:
 chroot "$LFS" /usr/bin/env -i \

@@ -16,4 +16,8 @@ pushd $LFS/sources
  md5sum -c md5sums
 popd
 ls $LFS/sources
-echo "ls \$LFS/sources"
+pwd
+cat <<"EOF"
+run cmd check:
+ls $LFS/sources
+EOF

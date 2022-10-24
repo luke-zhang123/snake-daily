@@ -1,11 +1,5 @@
 #!/bin/bash
-# chapter 7 after chroot
-
-run_user=$(id -u -n)
-if [ "$run_user" != "root" ];then
-  echo "run as root user, current user $run_user"
-  exit 1
-fi
+# chapter 7.5 after chroot
 
 if [ "$(stat -c %d:%i /)" == "$(stat -c %d:%i /proc/1/root/.)" ]; then
   echo "not in chroot"
@@ -80,6 +74,7 @@ echo "tester:x:101:" >> /etc/group
 install -o tester -d /home/tester
 
 cat <<"EOF"
+run cmd reload bash:
 exec /usr/bin/bash --login
 
 touch /var/log/{btmp,lastlog,faillog,wtmp}
