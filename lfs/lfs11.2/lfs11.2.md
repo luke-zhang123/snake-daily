@@ -93,7 +93,7 @@ bash 7chroot3.sh
 8lfs-system1.sh
 
 
-10.4 grub生成rescue iso
+10.4 grub生成rescue iso，xorriso命令在libisoburn，上面两个是依赖包
 https://files.libburnia-project.org/releases/libburn-1.5.4.tar.gz
 ./configure --prefix=/usr --disable-static
 make
@@ -118,6 +118,7 @@ make install
 cd linux-5.19.2
 make mrproper
 make defconfig
+make localmodconfig
 make menuconfig
 make
 make modules_install
@@ -144,3 +145,115 @@ vmware启动到硬件，改成 第二磁盘启动，报错
 Kernel Panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
 
 暂时没有解决
+
+lsblk -o name,uuid
+
+cp /boot/vmlinuz-3.10.0-1160.71.1.el7.x86_64 .
+cp /boot/initramfs-3.10.0-1160.71.1.el7.x86_64.img .
+
+grub-install --target=i386-pc /dev/sdb
+grub-mkconfig -o /boot/grub/grub.cfg
+
+menuentry 'CentOS Linux (vmlinuz-5.19.2-lfs-11.2) 7 (Core)' {
+        set gfxpayload=keep
+        insmod gzio
+        insmod part_msdos
+        insmod ext2
+        
+        search --no-floppy --fs-uuid --set=root 6a130d74-2980-4ac9-8ba3-6d8b5bda042e
+
+        linux16 /boot/vmlinuz-5.19.2-lfs-11.2 LANG=en_US.UTF-8
+        initrd16 /boot/initramfs-3.10.0-1160.71.1.el7.x86_64.img
+}
+
+
+vmlinuz-5.19.2-lfs-11.2
+
+
+
+
+set default=0
+set timeout=5
+
+menuentry "GNU/Linux, Linux 5.19.2-lfs-11.2" {
+        set gfxpayload=keep
+        insmod gzio
+        insmod part_msdos
+        insmod ext2
+
+        search --no-floppy --fs-uuid --set=root 6a130d74-2980-4ac9-8ba3-6d8b5bda042e
+        linux /boot/vmlinuz-5.19.2-lfs-11.2 root=/dev/sda1
+}
+
+menuentry 'CentOS Linux (3.10.0-1160.71.1.el7.x86_64) 7 (Core)' {
+        set gfxpayload=keep
+        insmod gzio
+        insmod part_msdos
+        insmod ext2
+
+        search --no-floppy --fs-uuid --set=root 6a130d74-2980-4ac9-8ba3-6d8b5bda042e
+
+        linux16 /boot/vmlinuz-3.10.0-1160.71.1.el7.x86_64 LANG=en_US.UTF-8
+        initrd16 /boot/initramfs-3.10.0-1160.71.1.el7.x86_64.img
+}
+
+menuentry 'CentOS Linux (vmlinuz-5.19.2-lfs-11.2) 7 (Core)' {
+        set gfxpayload=keep
+        insmod gzio
+        insmod part_msdos
+        insmod ext2
+
+        search --no-floppy --fs-uuid --set=root 6a130d74-2980-4ac9-8ba3-6d8b5bda042e
+
+        linux16 /boot/vmlinuz-5.19.2-lfs-11.2 LANG=en_US.UTF-8
+        initrd16 /boot/initramfs-3.10.0-1160.71.1.el7.x86_64.img
+}
+
+```
+mkdir -p root
+cd root
+mkdir -p bin dev etc lib mnt proc sbin sys tmp var
+cd -
+
+curl -L 'https://busybox.net/downloads/binaries/1.35.0-x86_64-linux-musl/busybox' >root/bin/busybox
+chmod +x root/bin/busybox
+
+root/bin/busybox --install root/bin/
+ls root/bin/
+
+cat >>root/init << EOF
+#!/bin/busybox sh
+
+mount -t devtmpfs  devtmpfs  /dev
+mount -t proc      proc      /proc
+mount -t sysfs     sysfs     /sys
+mount -t tmpfs     tmpfs     /tmp
+
+mknod -m 600 /dev/console c 5 1
+mknod -m 666 /dev/null c 1 3
+
+sh
+EOF
+
+cd root
+find . | cpio -ov --format=newc | gzip -9 >../initramfz
+cd -
+
+cp initramfz /lfs/boot/initramfs-5.19.2-lfs-11.2.img
+```
+
+
+mount -v --bind /dev $LFS/dev
+
+mount -v --bind /dev/pts $LFS/dev/pts
+mount -vt proc proc $LFS/proc
+mount -vt sysfs sysfs $LFS/sys
+mount -vt tmpfs tmpfs $LFS/run
+
+chroot "$LFS" /usr/bin/env -i \
+ HOME=/root \
+ TERM="$TERM" \
+ PS1='(lfs chroot) \u:\w\$ ' \
+ PATH=/usr/bin:/usr/sbin \
+ MAKEFLAGS="-j$(nproc)" \
+ /bin/bash --login
