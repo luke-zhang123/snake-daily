@@ -257,3 +257,62 @@ chroot "$LFS" /usr/bin/env -i \
  PATH=/usr/bin:/usr/sbin \
  MAKEFLAGS="-j$(nproc)" \
  /bin/bash --login
+
+
+[root@c7 ~]# lsmod |grep scsi
+scsi_transport_spi     30732  1 mptspi
+mptscsih               40150  1 mptspi
+mptbase               106036  2 mptspi,mptscsih
+[root@c7 ~]# cat /proc/scsi/scsi
+Attached devices:
+Host: scsi0 Channel: 00 Id: 00 Lun: 00
+  Vendor: VMware,  Model: VMware Virtual S Rev: 1.0
+  Type:   Direct-Access                    ANSI  SCSI revision: 02
+Host: scsi0 Channel: 00 Id: 01 Lun: 00
+  Vendor: VMware,  Model: VMware Virtual S Rev: 1.0
+  Type:   Direct-Access                    ANSI  SCSI revision: 02
+Host: scsi2 Channel: 00 Id: 00 Lun: 00
+  Vendor: NECVMWar Model: VMware IDE CDR10 Rev: 1.00
+  Type:   CD-ROM                           ANSI  SCSI revision: 05
+[root@c7 ~]#
+
+
+(lfs chroot) root:/# lsmod |grep -E 'scsi|mptspi'
+mptspi                 22673  3
+scsi_transport_spi     30732  1 mptspi
+mptscsih               40150  1 mptspi
+mptbase               106036  2 mptspi,mptscsih
+
+
+dmesg -T |less
+scsi
+ata_piix
+
+awk '{ print $1 }' /proc/modules | xargs modinfo -n | sort |grep -E 'drivers/scsi|drivers/ata|drivers/message/fusion'
+
+cd root/
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/ata/ata_generic.ko.xz ./
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/ata/ata_piix.ko.xz ./
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/ata/libata.ko.xz ./
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/ata/pata_acpi.ko.xz ./
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/message/fusion/mptbase.ko.xz ./
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/message/fusion/mptscsih.ko.xz ./
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/message/fusion/mptspi.ko.xz ./
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/scsi/scsi_transport_spi.ko.xz ./
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/scsi/sd_mod.ko.xz ./
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/scsi/sg.ko.xz ./
+cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/scsi/sr_mod.ko.xz ./
+
+
+message/fusion/mptbase
+message/fusion/mptscsih
+scsi/scsi_transport_spi
+message/fusion/mptspi
+
+ata/libata
+ata/ata_piix  #cdrom
+
+进入initramfs
+depmod 生成mod依赖库, modprobe会自动加载依赖
+modprobe mptspi
+modprobe ata_piix
