@@ -114,6 +114,10 @@ https://files.libburnia-project.org/releases/libisoburn-1.5.4.tar.gz
 make
 make install
 
+make distclean
+make mrproper
+make defconfig
+make allyesconfig
 
 cd linux-5.19.2
 make mrproper
@@ -182,7 +186,7 @@ menuentry "GNU/Linux, Linux 5.19.2-lfs-11.2" {
         insmod ext2
 
         search --no-floppy --fs-uuid --set=root 6a130d74-2980-4ac9-8ba3-6d8b5bda042e
-        linux /boot/vmlinuz-5.19.2-lfs-11.2 root=/dev/sda1
+        linux /boot/vmlinuz-5.19.2-lfs-11.2 root=/dev/sdb1
 }
 
 menuentry 'CentOS Linux (3.10.0-1160.71.1.el7.x86_64) 7 (Core)' {
@@ -290,6 +294,23 @@ ata_piix
 
 awk '{ print $1 }' /proc/modules | xargs modinfo -n | sort |grep -E 'drivers/scsi|drivers/ata|drivers/message/fusion'
 
+awk '{ print $1 }' /proc/modules | xargs modinfo -n | sort |xargs -i cp --parents {} .
+for MODULE in $(find /lib/modules/$(uname -r)/kernel -name '*.ko' -exec basename '{}' .ko ';')
+do
+    echo "Loading $MODULE"
+    modprobe -D $MODULE
+    modprobe $MODULE
+    ls /dev/sd* 2>&1
+    if [ $? -eq 0 ]; then
+        echo 'find /dev/sd*'
+        ls /dev/sd*
+        exit 0
+    else
+        echo '/dev/sd* not found'
+    fi
+done
+
+
 cd root/
 cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/ata/ata_generic.ko.xz ./
 cp --parents /lib/modules/3.10.0-1160.71.1.el7.x86_64/kernel/drivers/ata/ata_piix.ko.xz ./
@@ -316,3 +337,17 @@ ata/ata_piix  #cdrom
 depmod 生成mod依赖库, modprobe会自动加载依赖
 modprobe mptspi
 modprobe ata_piix
+modprobe sd_mod
+
+
+sd_mod -> "SCSI disk support"
+sr_mod -> "SCSI CD_ROM Support"
+
+Ubuntu系统无法进入Grub引导界面
+https://blog.csdn.net/u013685264/article/details/125279731
+内核编译选配（VMware篇）
+https://www.cnblogs.com/sysk/p/4987698.html
+
+
+exec switch_root -c /dev/console /new_root /sbin/init
+
