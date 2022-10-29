@@ -180,39 +180,31 @@ set default=0
 set timeout=5
 
 menuentry "GNU/Linux, Linux 5.19.2-lfs-11.2" {
-        set gfxpayload=keep
-        insmod gzio
-        insmod part_msdos
-        insmod ext2
+    set gfxpayload=keep
+    insmod gzio
+    insmod part_msdos
+    insmod ext2
 
-        search --no-floppy --fs-uuid --set=root 6a130d74-2980-4ac9-8ba3-6d8b5bda042e
-        linux /boot/vmlinuz-5.19.2-lfs-11.2 root=/dev/sdb1
+    search --no-floppy --fs-uuid --set=root 6a130d74-2980-4ac9-8ba3-6d8b5bda042e
+    linux /boot/vmlinuz-5.19.2-lfs-11.2 root=/dev/sdb1
+}
+menuentry 'GNU/Linux, Linux 5.19.2-lfs-11.2--initramfs'  {
+    load_video
+    insmod gzio
+    insmod part_msdos
+    insmod ext2
+    
+    search --no-floppy --fs-uuid --set=root 6a130d74-2980-4ac9-8ba3-6d8b5bda042e
+    
+    linux   /boot/vmlinuz-5.19.2-lfs-11.2
+    initrd  /boot/initramfs-5.19.2-lfs-11.2.img
 }
 
-menuentry 'CentOS Linux (3.10.0-1160.71.1.el7.x86_64) 7 (Core)' {
-        set gfxpayload=keep
-        insmod gzio
-        insmod part_msdos
-        insmod ext2
-
-        search --no-floppy --fs-uuid --set=root 6a130d74-2980-4ac9-8ba3-6d8b5bda042e
-
-        linux16 /boot/vmlinuz-3.10.0-1160.71.1.el7.x86_64 LANG=en_US.UTF-8
-        initrd16 /boot/initramfs-3.10.0-1160.71.1.el7.x86_64.img
-}
-
-menuentry 'CentOS Linux (vmlinuz-5.19.2-lfs-11.2) 7 (Core)' {
-        set gfxpayload=keep
-        insmod gzio
-        insmod part_msdos
-        insmod ext2
-
-        search --no-floppy --fs-uuid --set=root 6a130d74-2980-4ac9-8ba3-6d8b5bda042e
-
-        linux16 /boot/vmlinuz-5.19.2-lfs-11.2 LANG=en_US.UTF-8
-        initrd16 /boot/initramfs-3.10.0-1160.71.1.el7.x86_64.img
-}
-
+制作initramfs
+init最后的sh，会让initramfs进入shell子进程，pid不是1，再执行exec switch_root会把当前shell子进程的pid（不是1）给/sbin/init，导致kernel panic启动失败
+调试好后，直接在initramfs的init（pid是1）里执行exec switch_root成功启动init
+mount /dev/sdb1 /mnt
+exec switch_root /mnt /sbin/init
 ```
 mkdir -p root
 cd root
@@ -343,10 +335,7 @@ modprobe sd_mod
 sd_mod -> "SCSI disk support"
 sr_mod -> "SCSI CD_ROM Support"
 
-Ubuntu系统无法进入Grub引导界面
-https://blog.csdn.net/u013685264/article/details/125279731
-内核编译选配（VMware篇）
-https://www.cnblogs.com/sysk/p/4987698.html
+
 
 
 exec switch_root -c /dev/console /new_root /sbin/init
@@ -366,5 +355,4 @@ https://www.linuxfromscratch.org/blfs/view/svn/postlfs/openssh.html
 PS1='[\u@\h \W]\$ ' 
 alias ls='ls --color'
 alias ll='ls --color -l'
-
-
+```
