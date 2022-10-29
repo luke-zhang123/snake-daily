@@ -351,3 +351,20 @@ https://www.cnblogs.com/sysk/p/4987698.html
 
 exec switch_root -c /dev/console /new_root /sbin/init
 
+/etc/fstab 10.2章，修改
+tmpfs /run tmpfs nodev,nosuid 0 0
+devpts /dev/pts devpts rw 0 0
+
+
+网卡名eno16777736 /etc/sysconfig/ifconfig.eno16777736 使用ens33的静态配置
+
+安装openssh，允许root登录，加 PermitRootLogin yes
+https://www.linuxfromscratch.org/blfs/view/svn/postlfs/openssh.html
+/usr/sbin/sshd  需要全路径执行，自动到后台
+
+```/root/.bash_profile
+PS1='[\u@\h \W]\$ ' 
+alias ls='ls --color'
+alias ll='ls --color -l'
+
+
