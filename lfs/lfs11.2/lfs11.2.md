@@ -35,6 +35,15 @@ yum install devtoolset-7-make
 mv /usr/bin/make /usr/bin/make_bak
 ln -s /opt/rh/devtoolset-7/root/usr/bin/make /usr/bin/make
 make -v
+
+wget http://ftp.gnu.org/gnu/make/make-4.3.tar.gz
+tar xf make-4.3.tar.gz
+cd make-4.3
+make
+make install
+mv /usr/bin/make /usr/bin/make_bak
+ln -s /usr/local/bin/make /usr/bin/make
+make -v
 ```
 
 root 执行本机软件检查，分区，默认新加硬盘位 sdb
