@@ -22,6 +22,14 @@ echo -ne 'Message to be encrypted!!!' |openssl rc4 -k 'p@ssw0rD' -nosalt -e -nop
 echo -ne '3604632e2f503ecb90c108acd3b03e0f22bde362754f02b1d466' |xxd -r -p |openssl rc4 -d -k 'p@ssw0rD' -nosalt -d -nopad
 
 ```
+windows cmd使用
+```
+"C:\Program Files\Git\usr\bin\openssl.exe" rc4 -K 25f9e794323b453885f5181f1b624d0b -nosalt -e -nopad -in openssl.in.dat -out openssl.out.dat
+CertUtil -encodehex openssl.out.dat openssl.hex.dat
+
+openssl enc -d -aes-256-cbc -in encrypted.data -out un_encrypted.data
+
+```
 
 - 测试用例
 ```
@@ -51,3 +59,5 @@ data='03 Message to be encrypted!!!'
 data_encrypt='f5f87f702850cc1e9a8bd8b67cb8827cbf66647f6cdbf65e8bdeaf8678' # hex
 
 ```
+
+[rc4 在线加解密，注意key，可以使用hex](http://rc4.online-domain-tools.com/)
