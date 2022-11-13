@@ -16,3 +16,6 @@ yum install bind-utils
 
 指定ip访问域名
 
+- lscpu | grep Byte.Order
+
+查看cpu大小端，x86小端，高位在大的地址端
