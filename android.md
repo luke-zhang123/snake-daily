@@ -8,3 +8,6 @@ https://dl.google.com/android/repository/sys-img/google_apis/x86_64-32_r03.zip
 
 implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
 implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+
+4大组件5大存储7大布局
+
