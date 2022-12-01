@@ -30,3 +30,5 @@ less $PGDATA/pg_hba.conf
 create table tbl02(id int,data1 varchar(300));
 insert into tbl02 values(9000,9000);
 select * from tbl01 t1, tbl02 t2 where t1.id=t2.id and t1.id=9000;
+create index t2_data1 on tbl02(data1);
+
