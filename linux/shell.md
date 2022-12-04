@@ -45,6 +45,7 @@ echo eda194edb5bd |xxd -p -r >test.ttt
 vi打开可以看到汉字  𥅽
 echo f0a585bd |xxd -p -r >test.ttt
 
+vim -c 'e ++enc=utf-16' test.txt
 d854 dd7d
 11011000 01010100 11011101 01111101
 
@@ -59,4 +60,9 @@ System.out.println(zi);
 byte[] codeUtf8 = {(byte) 0xd8, (byte) 0x54, (byte) 0xdd, (byte) 0x7d};
 System.out.println(new String(codeUtf8, StandardCharsets.UTF_16));
 ```
+
+查看文件二进制，直接用hexdump显示是小端，1,2高低字节反了
+hexdump -C test.txt
+od -t x1 test.txt
+hexdump -e '16/1 "%02x " "\n"' test.txt
 

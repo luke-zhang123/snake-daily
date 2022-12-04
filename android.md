@@ -11,3 +11,5 @@ implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
 4大组件5大存储7大布局
 
+Android四大组件是:活动、服务、广播接收器、内容提供商。它们的英文名称是ACTIVITY、SERVICE、BroadcastReceiver、Content Provider
+
