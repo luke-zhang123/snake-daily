@@ -37,7 +37,12 @@ echo "obase=2; ibase=16; 6D" |bc |awk '{printf("%08d\n", $1)}'
 二进制字符转16进制字符
 echo "obase=16; ibase=2; 11100100" |bc
 
+当前四个字节汉字的范围是 \U00020000 ~ \U0002B81D
+𫠜 U+2B81C  Decimal[178204]	UTF-8[F0 AB A0 9C]	UTF-16[D86E DC1C]	UTF-32[0002B81C] https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=2B81C&useutf8=true
 𥅽,是一个utf8的4字节汉字
+http://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=2517D
+U+2517D
+Decimal[151933]	UTF-8[F0 A5 85 BD]	UTF-16[D854 DD7D]	UTF-32[0002517D]
 ```
 vi打开，显示 𥅽 的unicode <d854><dd7d> ,下面前三个字节按照utf8编码保存d854
 echo eda194edb5bd |xxd -p -r >test.ttt
@@ -65,4 +70,11 @@ System.out.println(new String(codeUtf8, StandardCharsets.UTF_16));
 hexdump -C test.txt
 od -t x1 test.txt
 hexdump -e '16/1 "%02x " "\n"' test.txt
+
+|Character	|UTF-8	|UTF-16LE	|UTF-16BE|
+|:--|:--|:--|:--|
+|U+0041 (a)|	0x41|	0x41 0x00|	0x00 0x41|
+U+00E5 (å)	|0xC3 0xA5|	0xE5 0x00|	0x00 0xE5|
+U+201C (“)	|0xE2 0x80 0x9C|	0x1C 0x20|	0x20 0x1C|
+U+1F4A9 (💩)	|0xF0 0x9F 0x92 0xA9|	0x3D 0xD8 0xA9 0xDC|	0xD8 0x3D 0xDC 0xA9|
 
