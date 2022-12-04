@@ -44,3 +44,28 @@ public static void printASCII() {
     }
 }
 ```
+java判断字符长度问题
+```
+// String s = "𩸽";
+String s = "\uD854\uDD7D";
+System.out.println(s.length()); // 2
+System.out.println(s.codePointCount(0, s.length())); // 1
+```
+utf32编码转换
+```
+char a1 = '\uD854';
+char a2 = '\uDD7D';
+String zi = new String(new char[]{a1,a2});
+System.out.println(zi); // 𥅽
+System.out.println(Bin.bArr2HStr(zi.getBytes("utf-32"), true)); // 0002 517d
+System.out.println(Integer.parseInt("2517d",16)); // 151933
+
+int code = 151933;
+String hexStr = String.format("%08x", code);
+byte ziUtf32_1 = (byte) Integer.parseInt(hexStr.substring(0,2),16);
+byte ziUtf32_2 = (byte) Integer.parseInt(hexStr.substring(2,4),16);
+byte ziUtf32_3 = (byte) Integer.parseInt(hexStr.substring(4,6),16);
+byte ziUtf32_4 = (byte) Integer.parseInt(hexStr.substring(6,8),16);
+System.out.println(new String(new byte[]{ziUtf32_1,ziUtf32_2,ziUtf32_3,ziUtf32_4},"utf-32")); // 𥅽    
+```
+

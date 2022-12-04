@@ -38,6 +38,7 @@ echo "obase=2; ibase=16; 6D" |bc |awk '{printf("%08d\n", $1)}'
 echo "obase=16; ibase=2; 11100100" |bc
 
 当前四个字节汉字的范围是 \U00020000 ~ \U0002B81D
+下面的Decimal是utf32的值
 𫠜 U+2B81C Decimal[178204]	UTF-8[F0 AB A0 9C]	UTF-16[D86E DC1C]	UTF-32[0002B81C] https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=2B81C&useutf8=true
 𥅽,是一个utf8的4字节汉字
 𥅽 U+2517D Decimal[151933]	UTF-8[F0 A5 85 BD]	UTF-16[D854 DD7D]	UTF-32[0002517D] http://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=2517D
@@ -91,3 +92,4 @@ U+00E5 (å)	|0xC3 0xA5|	0xE5 0x00|	0x00 0xE5|
 U+201C (“)	|0xE2 0x80 0x9C|	0x1C 0x20|	0x20 0x1C|
 U+1F4A9 (💩)	|0xF0 0x9F 0x92 0xA9|	0x3D 0xD8 0xA9 0xDC|	0xD8 0x3D 0xDC 0xA9|
 
+unicode 
