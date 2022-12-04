@@ -48,9 +48,18 @@ vi打开，显示 𥅽 的unicode <d854><dd7d> ,下面前三个字节按照utf8�
 echo eda194edb5bd |xxd -p -r >test.ttt
 
 vi打开可以看到汉字  𥅽
-echo f0a585bd |xxd -p -r >test.ttt
+echo f0a585bd |xxd -p -r >test_utf8.txt
+iconv -f UTF-8 -t GB18030 test_utf8.txt > test_gb18030.txt
+vi -c 'e ++enc=gb18030' test_gb18030.txt
+iconv -f UTF-8 -t UTF-16 test_utf8.txt > test_utf16.txt
+vim -c 'e ++enc=utf-16le' test_utf16.txt # fffe 54d8 7ddd
 
-vim -c 'e ++enc=utf-16' test.txt
+echo 9638c837 |xxd -p -r >test_gb18030.txt
+vi -c 'e ++enc=gb18030' test_gb18030.txt
+
+echo d854dd7d |xxd -p -r >test_utf16.txt
+vim -c 'e ++enc=utf-16' test_utf16.txt
+
 d854 dd7d
 11011000 01010100 11011101 01111101
 
