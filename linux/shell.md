@@ -58,6 +58,12 @@ vi -c 'e ++enc=gb18030' test_gb18030.txt
 echo d854dd7d |xxd -p -r >test_utf16.txt
 vim -c 'e ++enc=utf-16' test_utf16.txt
 
+大小端测试
+echo fffe54d87ddd |xxd -p -r >test_utf16le.txt
+vim -c 'e ++enc=utf-16le' test_utf16le.txt
+echo feffd854dd7d |xxd -p -r >test_utf16be.txt
+vim -c 'e ++enc=utf-16be' test_utf16be.txt
+
 d854 dd7d
 11011000 01010100 11011101 01111101
 

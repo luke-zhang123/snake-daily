@@ -25,7 +25,7 @@ System.out.println(zi); // 𥅽
 System.out.println(Bin.bArr2HStr(zi.getBytes(), true)); // f0a5 85bd
 System.out.println(Bin.bArr2HStr(zi.getBytes("utf-8"), true)); // f0a5 85bd
 System.out.println(Bin.bArr2HStr(zi.getBytes("gb18030"), true)); // 9638 c837
-System.out.println(Bin.bArr2HStr(zi.getBytes("utf-16"), true)); // feff d854 dd7d // feff 是utf bom头，小端
+System.out.println(Bin.bArr2HStr(zi.getBytes("utf-16"), true)); // feff d854 dd7d // feff 是utf bom头，java默认使用network大端，FE, FF (big endian) or as FF, FE (little endian).
 System.out.println(Bin.bArr2HStr(zi.getBytes("utf-32"), true)); // 0002 517d
 
 byte[] codeUtf8_1 = {(byte) 0xd8, (byte) 0x54, (byte) 0xdd, (byte) 0x7d};
