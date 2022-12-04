@@ -34,4 +34,13 @@ byte[] codeUtf8_2 = {(byte) 0xfe, (byte) 0xff, (byte) 0xd8, (byte) 0x54, (byte) 
 System.out.println(new String(codeUtf8_2, StandardCharsets.UTF_16));
 ```
 
-
+打印ascii
+```
+// 9 -> tab, 10 -> LF 换行, 13 -> CR 回车
+public static void printASCII() {
+    for (int i = 0; i < 255; i++) {
+        System.out.printf("%3d [%3x] [%3s] | ",i,i,(char)i);
+        if (i != 0 && (i+1) % 5 == 0) System.out.println();
+    }
+}
+```

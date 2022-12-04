@@ -38,11 +38,9 @@ echo "obase=2; ibase=16; 6D" |bc |awk '{printf("%08d\n", $1)}'
 echo "obase=16; ibase=2; 11100100" |bc
 
 当前四个字节汉字的范围是 \U00020000 ~ \U0002B81D
-𫠜 U+2B81C  Decimal[178204]	UTF-8[F0 AB A0 9C]	UTF-16[D86E DC1C]	UTF-32[0002B81C] https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=2B81C&useutf8=true
+𫠜 U+2B81C Decimal[178204]	UTF-8[F0 AB A0 9C]	UTF-16[D86E DC1C]	UTF-32[0002B81C] https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=2B81C&useutf8=true
 𥅽,是一个utf8的4字节汉字
-http://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=2517D
-U+2517D
-Decimal[151933]	UTF-8[F0 A5 85 BD]	UTF-16[D854 DD7D]	UTF-32[0002517D]
+𥅽 U+2517D Decimal[151933]	UTF-8[F0 A5 85 BD]	UTF-16[D854 DD7D]	UTF-32[0002517D] http://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=2517D
 ```
 vi打开，显示 𥅽 的unicode <d854><dd7d> ,下面前三个字节按照utf8编码保存d854
 echo eda194edb5bd |xxd -p -r >test.ttt
