@@ -13,3 +13,9 @@ implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
 Android四大组件是:活动、服务、广播接收器、内容提供商。它们的英文名称是ACTIVITY、SERVICE、BroadcastReceiver、Content Provider
 
+/Users/zhanghui/Library/Android/sdk/platform-tools/adb devices
+/Users/zhanghui/Library/Android/sdk/platform-tools/adb -s 10ebcf19 shell
+cd /sdcard/Download/
+
+adb push <local file> <remote location>
+adb pull <remote file> <local location>

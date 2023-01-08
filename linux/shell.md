@@ -92,4 +92,31 @@ U+00E5 (å)	|0xC3 0xA5|	0xE5 0x00|	0x00 0xE5|
 U+201C (“)	|0xE2 0x80 0x9C|	0x1C 0x20|	0x20 0x1C|
 U+1F4A9 (💩)	|0xF0 0x9F 0x92 0xA9|	0x3D 0xD8 0xA9 0xDC|	0xD8 0x3D 0xDC 0xA9|
 
-unicode 
+unicode
+
+vi -b ^M是\r
+
+vi :set list  ^|是tab，indent,行尾$  set nolist  set listchars+=space:_
+
+pmap -x pid|sort -n -k 3
+
+ipcs -m 共享内存shmid nattach 0异常
+
+ss -lptn 'sport = :22'
+ss -n src ip:port
+
+emacs C control M alt
+tutorial 回车
+CxCc 退出
+Cg 终止当前执行的命令
+Cv 下一页 Mv 上一页
+Cl 光标行居中
+Cp n b f 上下左右移动光标
+Mf b 光标移动单词 右
+Ma 句首
+Me 句尾
+M< 文件头 M> 文件尾
+CxCs 保存
+Cxcw 另存
+Cs 搜索
+Cr 向上收缩
